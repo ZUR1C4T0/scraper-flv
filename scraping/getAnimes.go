@@ -37,10 +37,16 @@ func getAnimes(c *colly.Collector, links []string) []anime.Anime {
 		animes = append(animes, a)
 	})
 
-	for _, link := range links {
-		go c.Visit(link)
+	// divide links in chunks to avoid errors of too many requests
+	chunks := chunkLinks(links, 200)
+	for _, chunk := range chunks {
+
+		for _, link := range chunk {
+			go c.Visit(link)
+		}
+
+		c.Wait()
 	}
 
-	c.Wait()
 	return animes
 }
