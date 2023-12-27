@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func LogError(path string, err error) {
+func LogError(path string, err string) {
 	absPath, _ := filepath.Abs(path)
 	file, _ := os.OpenFile(absPath, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	defer file.Close()

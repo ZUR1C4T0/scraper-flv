@@ -1,6 +1,8 @@
 package scraping
 
 import (
+	"fmt"
+
 	"github.com/ZUR1C4T0/scraper-flv/logging"
 	"github.com/ZUR1C4T0/scraper-flv/models/anime"
 	"github.com/gocolly/colly"
@@ -10,7 +12,8 @@ func getAnimes(c *colly.Collector, links []string) []anime.Anime {
 	animes := make([]anime.Anime, 0, len(links))
 
 	c.OnError(func(r *colly.Response, err error) {
-		logging.LogError("errors.log", err)
+		errMsg := fmt.Sprintf("Error %d %s: %s", r.StatusCode, err.Error(), r.Request.URL.String())
+		logging.LogError("anime-errors.log", errMsg)
 	})
 
 	c.OnHTML(".Body", func(e *colly.HTMLElement) {
